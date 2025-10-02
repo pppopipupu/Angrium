@@ -1,0 +1,14 @@
+{
+  "loader": "neoforge:obj",
+  "model": "angry:models/angry_female.obj",
+  "mtl_override": "angry:models/angry_female.mtl",
+  "textures": {
+    "particle": "angry:block/face_angry",
+    "texture0": "angry:block/angry_female",
+    "texture1": "angry:block/bow_tie"
+  },
+  "automatic_culling": false,
+  "shade_quads": true,
+  "flip_v": true,
+  "emissive_ambient": true
+}

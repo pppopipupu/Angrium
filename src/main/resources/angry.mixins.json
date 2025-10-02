@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "com.pppopipupu.angry.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "MixinBlockRenderDispatcher"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}
