@@ -1,4 +1,4 @@
-// 1.21.1	2025-10-03T00:32:35.2310216	Registries
+// 1.21.1	2025-10-06T17:59:49.1579521	Registries
 75e34a7d23b1deb581ec52a570bb4cf0041bf25f data/angry/neoforge/biome_modifier/add_angry_block.json
 c0977ce3e4d49af8b25035c737264778b5a34269 data/angry/worldgen/configured_feature/angry_block_feature.json
-4bf1aa0547914741510d984de6acc51fd2f304c2 data/angry/worldgen/placed_feature/angry_block_placed.json
+390de9efa4737fce538bd554492e01c077b6fb96 data/angry/worldgen/placed_feature/angry_block_placed.json
