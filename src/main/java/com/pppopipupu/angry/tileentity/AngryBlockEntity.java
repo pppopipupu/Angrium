@@ -34,12 +34,13 @@ public class AngryBlockEntity extends BlockEntity {
     private final List<AngryLightingBolt> activeBolts = new ArrayList<>();
     public boolean IS_LIGHTNING = true;
     private final RandomSource random = RandomSource.create();
+
     public AngryBlockEntity(BlockPos pos, BlockState state) {
         super(Angry.ANGRY_BLOCK_ENTITY.get(), pos, state);
     }
 
     public static void tickClient(Level level, BlockPos pos, BlockState state, AngryBlockEntity blockEntity) {
-        if(state.getValue(AngryBlock.IS_LIGHTNING)) {
+        if (state.getValue(AngryBlock.IS_LIGHTNING)) {
             blockEntity.tickLightingBolts();
         }
         if (blockEntity.level.getGameTime() % 5 == 0) {
@@ -55,6 +56,7 @@ public class AngryBlockEntity extends BlockEntity {
         }
 
     }
+
     public static void tick(Level level, BlockPos pos, BlockState state, AngryBlockEntity blockEntity) {
         AABB aabb = new AABB(
                 pos.getX() - 3, level.getMinBuildHeight(), pos.getZ() - 3,
@@ -66,8 +68,8 @@ public class AngryBlockEntity extends BlockEntity {
             level.setBlock(pos, newState, 3);
         }
         if (state.getValue(AngryBlock.IS_LIGHTNING)) {
-            final double radius = 4.0f;
-            final double pushStrength = 0.8f;
+            final double radius = 6.0f;
+            final double pushStrength = 1.0f;
             final float damageAmount = 1.5f;
 
             AABB forceFieldAABB = new AABB(pos).inflate(radius);
@@ -79,7 +81,7 @@ public class AngryBlockEntity extends BlockEntity {
             for (LivingEntity entity : nearbyEntities) {
                 Vec3 entityPos = entity.position();
                 Vec3 pushVector = entityPos.subtract(blockCenter).normalize();
-                entity.push(pushVector.x * pushStrength, pushVector.y * pushStrength, pushVector.z * pushStrength);
+                entity.push(pushVector.x * pushStrength, pushVector.y * pushStrength * 2, pushVector.z * pushStrength);
                 entity.hurtMarked = true;
                 entity.setHealth(entity.getHealth() - damageAmount);
             }
@@ -115,9 +117,9 @@ public class AngryBlockEntity extends BlockEntity {
 
         int life = 15 + random.nextInt(20);
         float thickness = 0.06f + random.nextFloat() * 0.04f;
-        int segments = 10;
+        int segments = 15;
         float jitter = 0.4f;
-        int maxRecursion = 2;
+        int maxRecursion = 3;
 
         AngryLightingBolt newBolt = new AngryLightingBolt(
                 new Vector3f(0, 0, 0), endPoint, segments, jitter, thickness, life, r, g, b, maxRecursion, this.random

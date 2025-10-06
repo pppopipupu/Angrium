@@ -4,13 +4,8 @@ import com.mojang.serialization.MapCodec;
 import com.pppopipupu.angry.Angry;
 import com.pppopipupu.angry.tileentity.AngryBlockEntity;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -19,11 +14,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.storage.loot.LootParams;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -80,10 +71,10 @@ public class AngryBlock extends MultiPartBlock {
     @Override
     protected @NotNull List<ItemStack> getDrops(BlockState state, LootParams.Builder params) {
         if(state.getValue(MultiPartBlock.IS_CORE)) {
-            Item droppedItem = state.getValue(AngryBlock.IS_LIGHTNING)
-                    ? Angry.ANGRY_LIGHTNING_BLOCK_ITEM.get()
-                    : Angry.ANGRY_BLOCK_ITEM.get();
-            return List.of(new ItemStack(droppedItem));
+
+            return state.getValue(AngryBlock.IS_LIGHTNING)
+                    ? List.of(Angry.ANGRY_LIGHTNING_BLOCK_ITEM.get().getDefaultInstance(),Angry.ANGRY_SWORD.get().getDefaultInstance())
+                    : List.of(Angry.ANGRY_BLOCK_ITEM.get().getDefaultInstance());
         }
         return List.of();
     }

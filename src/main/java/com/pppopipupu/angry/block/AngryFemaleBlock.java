@@ -7,18 +7,21 @@ import com.pppopipupu.angry.tileentity.AngryFemaleEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.LootParams;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AngryFemaleBlock extends MultiPartBlock{
+public class AngryFemaleBlock extends MultiPartBlock {
     public AngryFemaleBlock(Properties properties) {
         super(properties);
     }
@@ -27,6 +30,7 @@ public class AngryFemaleBlock extends MultiPartBlock{
     public MapCodec<AngryBlock> codec() {
         return Angry.SIMPLE_CODEC.value();
     }
+
     @Nullable
     @Override
     protected BlockEntity createCoreBlockEntity(BlockPos pos, BlockState state) {
@@ -34,6 +38,7 @@ public class AngryFemaleBlock extends MultiPartBlock{
         return new AngryFemaleEntity(pos, state);
 
     }
+
     @Override
     public Vec3i getStructureDimensions() {
         return new Vec3i(2, 2, 2);
@@ -43,6 +48,15 @@ public class AngryFemaleBlock extends MultiPartBlock{
     public BlockPos getCoreOffsetInStructure() {
         return BlockPos.ZERO;
     }
+
+    @Override
+    protected @NotNull List<ItemStack> getDrops(BlockState state, LootParams.Builder params) {
+        if (state.getValue(MultiPartBlock.IS_CORE)) {
+            return List.of(Angry.ANGRY_FEMALE_ITEM.get().getDefaultInstance());
+        }
+        return List.of();
+    }
+
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {

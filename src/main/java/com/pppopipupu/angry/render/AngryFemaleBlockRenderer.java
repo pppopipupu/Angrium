@@ -1,11 +1,8 @@
 package com.pppopipupu.angry.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import com.pppopipupu.angry.AngryLightingBolt;
 import com.pppopipupu.angry.block.MultiPartBlock;
-import com.pppopipupu.angry.tileentity.AngryBlockEntity;
 import com.pppopipupu.angry.tileentity.AngryFemaleEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -18,15 +15,11 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 
-import java.util.List;
-import java.util.Random;
-
 public class AngryFemaleBlockRenderer implements BlockEntityRenderer<AngryFemaleEntity> {
 
     private final BlockRenderDispatcher blockRenderer;
     private BakedModel model;
     private final RandomSource random = RandomSource.create();
-
     public AngryFemaleBlockRenderer(BlockEntityRendererProvider.Context context) {
         this.blockRenderer = context.getBlockRenderDispatcher();
     }

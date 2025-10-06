@@ -5,8 +5,10 @@ import com.mojang.serialization.MapCodec;
 import com.pppopipupu.angry.block.AngryBlock;
 import com.pppopipupu.angry.block.AngryFemaleBlock;
 import com.pppopipupu.angry.block.MultiPartBlock;
+import com.pppopipupu.angry.entity.AngryFireBall;
 import com.pppopipupu.angry.item.AngryBlockItem;
 import com.pppopipupu.angry.item.AngryLightningItem;
+import com.pppopipupu.angry.item.AngrySwordItem;
 import com.pppopipupu.angry.tileentity.AngryBlockEntity;
 import com.pppopipupu.angry.tileentity.AngryFemaleEntity;
 import com.pppopipupu.angry.world.AngryBlockFeature;
@@ -22,8 +24,11 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Tiers;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.levelgen.GenerationStep;
@@ -67,6 +72,7 @@ public class Angry {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(MODID);
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, MODID);
     public static final DeferredRegister<MapCodec<? extends Block>> REGISTRAR = DeferredRegister.create(BuiltInRegistries.BLOCK_TYPE, MODID);
+    public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(Registries.ENTITY_TYPE, MODID);
 
     // Blocks
     public static final DeferredBlock<AngryBlock> ANGRY_BLOCK = BLOCKS.register("angry_block", () -> new AngryBlock(Block.Properties.of().strength(2.0f).mapColor(MapColor.STONE).noOcclusion()));
@@ -79,10 +85,17 @@ public class Angry {
     public static final DeferredItem<BlockItem> ANGRY_LIGHTNING_BLOCK_ITEM = ITEMS.register("angry_lightning_block", () -> new AngryLightningItem(ANGRY_BLOCK.get(), new Item.Properties()));
     public static final DeferredItem<BlockItem> ANGRY_BLOCK_ITEM = ITEMS.register("angry_block", () -> new AngryBlockItem(ANGRY_BLOCK.get(), new Item.Properties()));
     public static final DeferredItem<BlockItem> ANGRY_FEMALE_ITEM = ITEMS.registerSimpleBlockItem("angry_female_block", ANGRY_FEMALE_BLOCK);
-
+    public static final DeferredItem<Item> ANGRY_SWORD= ITEMS.register("angry_sword", AngrySwordItem::new);
     // Block Entities
     public static final Supplier<BlockEntityType<AngryBlockEntity>> ANGRY_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register("angry_block_entity", () -> BlockEntityType.Builder.of(AngryBlockEntity::new, ANGRY_BLOCK.get()).build(null));
     public static final Supplier<BlockEntityType<AngryFemaleEntity>> ANGRY_FEMALE_ENTITY = BLOCK_ENTITY_TYPES.register("angry_female_entity", () -> BlockEntityType.Builder.of(AngryFemaleEntity::new, ANGRY_FEMALE_BLOCK.get()).build(null));
+    //Entities
+    public static final Supplier<EntityType<AngryFireBall>> ANGRY_FIREBALL =
+            ENTITY_TYPES.register("angry_fireball", () -> EntityType.Builder.<AngryFireBall>of(AngryFireBall::new, MobCategory.MISC)
+                    .sized(0.4F, 0.4F)
+                    .clientTrackingRange(8)
+                    .updateInterval(1)
+                    .build("angry_fireball"));
 
     // World Generation
     public static final List<MultiPartBlock> MULTI_PART_BLOCKS_TO_GENERATE = new ArrayList<>();
@@ -102,7 +115,7 @@ public class Angry {
         FEATURES.register(modEventBus);
         CONFIGURED_FEATURES.register(modEventBus);
         PLACED_FEATURES.register(modEventBus);
-
+        ENTITY_TYPES.register(modEventBus);
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::onBlocksRegistered);
         modEventBus.addListener(this::gatherData);
@@ -151,7 +164,7 @@ public class Angry {
         context.register(ANGRY_BLOCK_PLACED_FEATURE_KEY, new PlacedFeature(
                 configuredFeatureRegistry.getOrThrow(ANGRY_BLOCK_CONFIGURED_FEATURE_KEY),
                 List.of(
-                        RarityFilter.onAverageOnceEvery(32),
+                        RarityFilter.onAverageOnceEvery(128),
                         CountPlacement.of(UniformInt.of(2, 5)),
                         InSquarePlacement.spread(),
                         PlacementUtils.HEIGHTMAP_WORLD_SURFACE,
