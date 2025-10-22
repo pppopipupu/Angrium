@@ -1,6 +1,7 @@
 package com.pppopipupu.angry.tileentity;
 
 import com.pppopipupu.angry.Angry;
+import com.pppopipupu.angry.block.AngryFemaleBlock;
 import com.pppopipupu.angry.block.MultiPartBlock;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -51,7 +52,7 @@ public class AngryFemaleEntity extends BlockEntity {
                 blockEntity.rotationAngle = 0.0f;
             }
         }
-        if (blockEntity.level.getGameTime() % 2 == 0) {
+        if (state.getValue(AngryFemaleBlock.IS_LOVE)) {
             double centerX = pos.getX() + 0.5;
             double centerY = pos.getY() + 0.5;
             double centerZ = pos.getZ() + 0.5;

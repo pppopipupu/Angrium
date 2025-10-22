@@ -38,7 +38,7 @@ public class AngryBlockFeature extends Feature<NoneFeatureConfiguration> {
         BlockPos origin = context.origin();
         RandomSource random = context.random();
 
-        MultiPartBlock blockToPlace = blocks.get(random.nextInt(0,7)>5 ? 1:0);
+        MultiPartBlock blockToPlace = blocks.get(random.nextInt(0,8)>5 ? 1:0);
         Direction facing = Direction.Plane.HORIZONTAL.getRandomDirection(random);
 
         if (!MultiPartBlock.canPlaceStructureAt(level, origin, facing, blockToPlace.getStructureDimensions(), blockToPlace.getCoreOffsetInStructure())) {

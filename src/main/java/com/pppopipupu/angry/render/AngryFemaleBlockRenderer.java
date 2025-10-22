@@ -14,6 +14,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.client.model.data.ModelData;
 
 public class AngryFemaleBlockRenderer implements BlockEntityRenderer<AngryFemaleEntity> {
 
@@ -69,7 +70,10 @@ public class AngryFemaleBlockRenderer implements BlockEntityRenderer<AngryFemale
                 model,
                 1.0f, 1.0f, 1.0f,
                 packedLight,
-                packedOverlay
+                packedOverlay,
+                ModelData.EMPTY,
+                RenderType.solid(
+                )
         );
         poseStack.popPose();
     }

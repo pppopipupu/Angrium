@@ -47,19 +47,11 @@ public class AngryFireBall extends Fireball {
     protected void onHit(HitResult result) {
         super.onHit(result);
         if (!this.level().isClientSide) {
+            //操逼逼，不停操逼逼，然后爆掉
             this.level().explode(this, this.getX(), this.getY(), this.getZ(), 3.5F, Level.ExplosionInteraction.TNT);
-            this.discard();
         }
     }
 
-    @Override
-    protected void onHitEntity(EntityHitResult result) {
-        super.onHitEntity(result);
-        if (!this.level().isClientSide) {
-            this.level().explode(this, this.getX(), this.getY(), this.getZ(), 3.5F, Level.ExplosionInteraction.TNT);
-            this.discard();
-        }
-    }
 
     @Override
     public void tick() {

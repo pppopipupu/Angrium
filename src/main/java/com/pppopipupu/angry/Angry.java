@@ -28,7 +28,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Tiers;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.levelgen.GenerationStep;
@@ -57,8 +56,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static net.minecraft.world.level.block.state.BlockBehaviour.simpleCodec;
 
@@ -76,7 +73,7 @@ public class Angry {
 
     // Blocks
     public static final DeferredBlock<AngryBlock> ANGRY_BLOCK = BLOCKS.register("angry_block", () -> new AngryBlock(Block.Properties.of().strength(2.0f).mapColor(MapColor.STONE).noOcclusion()));
-    public static final DeferredBlock<AngryFemaleBlock> ANGRY_FEMALE_BLOCK = BLOCKS.register("angry_female_block", () -> new AngryFemaleBlock(Block.Properties.of().strength(2.0f).mapColor(MapColor.STONE)));
+    public static final DeferredBlock<AngryFemaleBlock> ANGRY_FEMALE_BLOCK = BLOCKS.register("angry_female_block", () -> new AngryFemaleBlock(Block.Properties.of().strength(2.0f).mapColor(MapColor.STONE).explosionResistance(1000f).noOcclusion()));
 
     // Codec
     public static final DeferredHolder<MapCodec<? extends Block>, MapCodec<AngryBlock>> SIMPLE_CODEC = REGISTRAR.register("simple", () -> simpleCodec(AngryBlock::new));
