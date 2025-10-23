@@ -42,7 +42,7 @@ public class AngrySwordItem extends SwordItem {
 
         @Override
         public float getAttackDamageBonus() {
-            return 10.45f;
+            return 1144.14f;
         }
 
         @Override
@@ -109,8 +109,7 @@ public class AngrySwordItem extends SwordItem {
                                 1.0F,
                                 1.0F / (level.getRandom().nextFloat() * 0.4F + 0.8F)
                         );
-                        blockState.setValue(AngryFemaleBlock.IS_LOVE, true);
-                        level.setBlock(pos, blockState, 3);
+                        level.setBlock(pos,blockState.setValue(AngryFemaleBlock.IS_LOVE, true), 3);
                         flag.set(true);
                     }
                 });

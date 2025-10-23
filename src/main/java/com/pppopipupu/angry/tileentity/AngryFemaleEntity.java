@@ -1,9 +1,11 @@
 package com.pppopipupu.angry.tileentity;
 
 import com.pppopipupu.angry.Angry;
+import com.pppopipupu.angry.ShaderManager;
 import com.pppopipupu.angry.block.AngryFemaleBlock;
 import com.pppopipupu.angry.block.MultiPartBlock;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.level.Level;
@@ -23,6 +25,7 @@ public class AngryFemaleEntity extends BlockEntity {
     public AngryFemaleEntity(BlockPos pos, BlockState blockState) {
         super(Angry.ANGRY_FEMALE_ENTITY.get(), pos, blockState);
     }
+
 
     public static void tick(Level level, BlockPos pos, BlockState state, AngryFemaleEntity blockEntity) {
         blockEntity.prevRotationAngle = blockEntity.rotationAngle;
@@ -53,6 +56,12 @@ public class AngryFemaleEntity extends BlockEntity {
             }
         }
         if (state.getValue(AngryFemaleBlock.IS_LOVE)) {
+            if(!ShaderManager.flag && isLookingAt) {
+                ShaderManager.flag = true;
+            }
+            else if(ShaderManager.flag && !isLookingAt) {
+                ShaderManager.flag = false;
+            }
             double centerX = pos.getX() + 0.5;
             double centerY = pos.getY() + 0.5;
             double centerZ = pos.getZ() + 0.5;

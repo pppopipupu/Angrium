@@ -2,17 +2,23 @@ package com.pppopipupu.angry.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import com.pppopipupu.angry.ShaderManager;
+import com.pppopipupu.angry.block.AngryFemaleBlock;
 import com.pppopipupu.angry.block.MultiPartBlock;
 import com.pppopipupu.angry.tileentity.AngryFemaleEntity;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.data.ModelData;
 
@@ -21,9 +27,11 @@ public class AngryFemaleBlockRenderer implements BlockEntityRenderer<AngryFemale
     private final BlockRenderDispatcher blockRenderer;
     private BakedModel model;
     private final RandomSource random = RandomSource.create();
+
     public AngryFemaleBlockRenderer(BlockEntityRendererProvider.Context context) {
         this.blockRenderer = context.getBlockRenderDispatcher();
     }
+
 
     @Override
     public void render(AngryFemaleEntity blockEntity, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
@@ -34,6 +42,7 @@ public class AngryFemaleBlockRenderer implements BlockEntityRenderer<AngryFemale
         if (model == null) {
             model = this.blockRenderer.getBlockModel(state);
         }
+
         poseStack.pushPose();
         Direction facing = state.getValue(MultiPartBlock.FACING);
         switch (facing) {
@@ -61,7 +70,6 @@ public class AngryFemaleBlockRenderer implements BlockEntityRenderer<AngryFemale
             poseStack.mulPose(Axis.YP.rotationDegrees(interpolatedAngle));
             poseStack.translate(-1.0, -1.0, -1.0);
         }
-
         var vertexConsumer = bufferSource.getBuffer(RenderType.solid());
         this.blockRenderer.getModelRenderer().renderModel(
                 poseStack.last(),

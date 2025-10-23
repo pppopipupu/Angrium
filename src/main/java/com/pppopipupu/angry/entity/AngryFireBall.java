@@ -56,7 +56,7 @@ public class AngryFireBall extends Fireball {
     @Override
     public void tick() {
         super.tick();
-        if (!this.level().isClientSide && this.life++ > 364) {
+        if (!this.level().isClientSide && this.life++ > 451) {
             this.level().explode(this, this.getX(), this.getY(), this.getZ(), 3.5F, Level.ExplosionInteraction.TNT);
             this.discard();
             return;

@@ -2,7 +2,7 @@
 //
 //import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 //import com.mojang.blaze3d.vertex.VertexFormat;
-//import net.minecraft.client.renderer.RenderStateShard;
+//import com.pppopipupu.angry.ShaderManager;
 //import net.minecraft.client.renderer.RenderType;
 //
 //public class AngryRenderType extends RenderType {
@@ -10,19 +10,17 @@
 //        super(name, format, mode, bufferSize, affectsCrumbling, sortOnUpload, setup, clear);
 //    }
 //
-//    public static final RenderType LIGHTNING_NO_DEPTH = create("lightning_no_depth",
-//            DefaultVertexFormat.POSITION_COLOR,
-//            VertexFormat.Mode.QUADS,
-//            256,
-//            false,
-//            false,
+//    public static final RenderType ANGRY = create("angry",
+//            DefaultVertexFormat.BLOCK, VertexFormat.Mode.QUADS, 2097152, true, true,
 //            RenderType.CompositeState.builder()
-//                    .setShaderState(RenderStateShard.RENDERTYPE_LIGHTNING_SHADER)
-//                    .setTransparencyState(RenderStateShard.NO_TRANSPARENCY)
-//                    .setDepthTestState(RenderStateShard.NO_DEPTH_TEST)
-//                    .setCullState(RenderStateShard.NO_CULL)
-//                    .setLightmapState(RenderStateShard.NO_LIGHTMAP)
-//                    .setOverlayState(RenderStateShard.NO_OVERLAY)
-//                    .createCompositeState(false));
+//                    .setShaderState(new ShaderStateShard(ShaderManager::getAngryShader))
+//                    .setLightmapState(LIGHTMAP)
+//                    .setTextureState(BLOCK_SHEET_MIPPED)
+//                    .setCullState(CULL)
+//                    .setDepthTestState(EQUAL_DEPTH_TEST)
+//                    .setTransparencyState(NO_TRANSPARENCY)
+//                    .setOverlayState(OVERLAY)
+//                    .createCompositeState(true));
 //}
+//
 //
