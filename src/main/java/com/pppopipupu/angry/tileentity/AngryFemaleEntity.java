@@ -5,13 +5,11 @@ import com.pppopipupu.angry.ShaderManager;
 import com.pppopipupu.angry.block.AngryFemaleBlock;
 import com.pppopipupu.angry.block.MultiPartBlock;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -21,6 +19,7 @@ public class AngryFemaleEntity extends BlockEntity {
     public float rotationAngle = 0.0f;
     private static final float ROTATION_SPEED = 12.0f;
     private static final float LERP_FACTOR = 0.86f;
+    public boolean prevTickFlag = false;
 
     public AngryFemaleEntity(BlockPos pos, BlockState blockState) {
         super(Angry.ANGRY_FEMALE_ENTITY.get(), pos, blockState);
@@ -59,7 +58,7 @@ public class AngryFemaleEntity extends BlockEntity {
             if(!ShaderManager.flag && isLookingAt) {
                 ShaderManager.flag = true;
             }
-            else if(ShaderManager.flag && !isLookingAt) {
+            else if(ShaderManager.flag && !isLookingAt && blockEntity.prevTickFlag) {
                 ShaderManager.flag = false;
             }
             double centerX = pos.getX() + 0.5;
@@ -71,6 +70,7 @@ public class AngryFemaleEntity extends BlockEntity {
             double randomZ = centerZ + (level.random.nextDouble() - 0.5) * 3.0;
 
             level.addParticle(ParticleTypes.HEART, randomX, randomY, randomZ, 0.0, 1.0, 0.0);
+            blockEntity.prevTickFlag = isLookingAt;
         }
 
     }

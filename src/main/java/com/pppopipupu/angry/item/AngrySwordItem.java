@@ -1,6 +1,5 @@
 package com.pppopipupu.angry.item;
 
-import com.pppopipupu.angry.Angry;
 import com.pppopipupu.angry.block.AngryFemaleBlock;
 import com.pppopipupu.angry.block.MultiPartBlock;
 import com.pppopipupu.angry.entity.AngryFireBall;
@@ -21,15 +20,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class AngrySwordItem extends SwordItem {
     public static class AngryTier implements Tier {
-
         @Override
         public int getUses() {
             return 114514;
