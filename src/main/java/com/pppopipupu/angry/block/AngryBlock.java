@@ -61,6 +61,9 @@ public class AngryBlock extends MultiPartBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
+        if(!pState.getValue(IS_CORE)) {
+            return null;
+        }
         if (pLevel.isClientSide()) {
             return createTickerHelper(pBlockEntityType, Angry.ANGRY_BLOCK_ENTITY.get(), AngryBlockEntity::tickClient);
         } else {

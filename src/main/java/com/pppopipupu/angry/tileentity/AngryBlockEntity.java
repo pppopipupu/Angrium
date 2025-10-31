@@ -43,17 +43,15 @@ public class AngryBlockEntity extends BlockEntity {
         if (state.getValue(AngryBlock.IS_LIGHTNING)) {
             blockEntity.tickLightingBolts();
         }
-        if (blockEntity.level.getGameTime() % 5 == 0) {
-            double centerX = pos.getX() + 0.5;
-            double centerY = pos.getY() + 0.5;
-            double centerZ = pos.getZ() + 0.5;
-
-            double randomX = centerX + (level.random.nextDouble() - 0.5) * 3.0;
-            double randomY = centerY + (level.random.nextDouble() - 0.5) * 3.0;
-            double randomZ = centerZ + (level.random.nextDouble() - 0.5) * 3.0;
-
-            level.addParticle(ParticleTypes.ANGRY_VILLAGER, randomX, randomY, randomZ, 0.0, 0.0, 0.0);
-        }
+        level.addParticle(
+                Angry.ANGRY_PARTICLE.get(),
+                pos.getX(),
+                pos.getY(),
+                pos.getZ(),
+                0,
+                0,
+                0
+        );
 
     }
 

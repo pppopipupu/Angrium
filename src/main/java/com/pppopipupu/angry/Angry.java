@@ -15,6 +15,8 @@ import com.pppopipupu.angry.world.AngryBlockFeature;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistrySetBuilder;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
@@ -74,7 +76,7 @@ public class Angry {
     // Blocks
     public static final DeferredBlock<AngryBlock> ANGRY_BLOCK = BLOCKS.register("angry_block", () -> new AngryBlock(Block.Properties.of().strength(2.0f).mapColor(MapColor.STONE).noOcclusion()));
     public static final DeferredBlock<AngryFemaleBlock> ANGRY_FEMALE_BLOCK = BLOCKS.register("angry_female_block", () -> new AngryFemaleBlock(Block.Properties.of().strength(2.0f).mapColor(MapColor.STONE).explosionResistance(1000f).noOcclusion()));
-
+   // public static final DeferredBlock<Block> HAGRY_BLOCK = BLOCKS.registerSimpleBlock("hagry_block");
     // Codec
     public static final DeferredHolder<MapCodec<? extends Block>, MapCodec<AngryBlock>> SIMPLE_CODEC = REGISTRAR.register("simple", () -> simpleCodec(AngryBlock::new));
 
@@ -83,6 +85,7 @@ public class Angry {
     public static final DeferredItem<BlockItem> ANGRY_BLOCK_ITEM = ITEMS.register("angry_block", () -> new AngryBlockItem(ANGRY_BLOCK.get(), new Item.Properties()));
     public static final DeferredItem<BlockItem> ANGRY_FEMALE_ITEM = ITEMS.registerSimpleBlockItem("angry_female_block", ANGRY_FEMALE_BLOCK);
     public static final DeferredItem<Item> ANGRY_SWORD= ITEMS.register("angry_sword", AngrySwordItem::new);
+    public static final DeferredItem<Item> ANGRY_SPEAR = ITEMS.registerSimpleItem("angry_spear");
     // Block Entities
     public static final Supplier<BlockEntityType<AngryBlockEntity>> ANGRY_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register("angry_block_entity", () -> BlockEntityType.Builder.of(AngryBlockEntity::new, ANGRY_BLOCK.get()).build(null));
     public static final Supplier<BlockEntityType<AngryFemaleEntity>> ANGRY_FEMALE_ENTITY = BLOCK_ENTITY_TYPES.register("angry_female_entity", () -> BlockEntityType.Builder.of(AngryFemaleEntity::new, ANGRY_FEMALE_BLOCK.get()).build(null));
@@ -103,6 +106,12 @@ public class Angry {
     public static final DeferredRegister<PlacedFeature> PLACED_FEATURES = DeferredRegister.create(Registries.PLACED_FEATURE, MODID);
     public static final ResourceKey<PlacedFeature> ANGRY_BLOCK_PLACED_FEATURE_KEY = createPlacedFeatureKey("angry_block_placed");
     public static final ResourceKey<BiomeModifier> ADD_ANGRY_BLOCK_BIOME_MODIFIER_KEY = createBiomeModifierKey("add_angry_block");
+    // Particles
+    public static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES =
+            DeferredRegister.create(Registries.PARTICLE_TYPE, Angry.MODID);
+
+    public static final DeferredHolder<ParticleType<?>, SimpleParticleType> ANGRY_PARTICLE =
+            PARTICLE_TYPES.register("angry_particle", () -> new SimpleParticleType(false));
 
     public Angry(IEventBus modEventBus, ModContainer modContainer) {
         BLOCKS.register(modEventBus);
@@ -113,6 +122,7 @@ public class Angry {
         CONFIGURED_FEATURES.register(modEventBus);
         PLACED_FEATURES.register(modEventBus);
         ENTITY_TYPES.register(modEventBus);
+        PARTICLE_TYPES.register(modEventBus);
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::onBlocksRegistered);
         modEventBus.addListener(this::gatherData);

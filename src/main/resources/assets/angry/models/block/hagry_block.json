@@ -3,7 +3,7 @@
   "model": "angry:models/angry.obj",
   "mtl_override": "angry:models/angry.mtl",
   "textures": {
-    "particle": "angry:block/face_angry",
+    "particle": "angry:block/face_hagry",
     "texture0": "angry:block/hagry_model"
   },
   "automatic_culling": false,

@@ -39,8 +39,8 @@ void main() {
     float GameTime = sin(PI * Time);
     vec4 baseColor = getColor(texCoord);
 
-    float bloomIntensity = 5.0 - GameTime;
-    float bloomThreshold = 0.8 - (GameTime / 4);
+    float bloomIntensity = 5.0 - GameTime * 4;
+    float bloomThreshold = 0.65 - (GameTime / 4);
     float bloomRadius = 0.05;
 
     vec4 bloomColor = vec4(0.0);
