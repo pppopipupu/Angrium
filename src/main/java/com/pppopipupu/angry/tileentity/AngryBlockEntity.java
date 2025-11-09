@@ -32,9 +32,8 @@ import java.util.Random;
 
 public class AngryBlockEntity extends BlockEntity {
     private final List<AngryLightingBolt> activeBolts = new ArrayList<>();
-    public boolean IS_LIGHTNING = true;
     private final RandomSource random = RandomSource.create();
-
+    public boolean is_jiaopei = false;
     public AngryBlockEntity(BlockPos pos, BlockState state) {
         super(Angry.ANGRY_BLOCK_ENTITY.get(), pos, state);
     }
@@ -43,16 +42,9 @@ public class AngryBlockEntity extends BlockEntity {
         if (state.getValue(AngryBlock.IS_LIGHTNING)) {
             blockEntity.tickLightingBolts();
         }
-        level.addParticle(
-                Angry.ANGRY_PARTICLE.get(),
-                pos.getX(),
-                pos.getY(),
-                pos.getZ(),
-                0,
-                0,
-                0
-        );
-
+        if(state.getValue(AngryBlock.IS_ATOMIC)) {
+            level.addParticle(Angry.ANGRY_PARTICLE.get(), pos.getX(), pos.getY(), pos.getZ(), 0.0D, 0.0D, 0.0D);
+        }
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, AngryBlockEntity blockEntity) {
@@ -63,12 +55,31 @@ public class AngryBlockEntity extends BlockEntity {
         List<LightningBolt> lightningBolts = level.getEntitiesOfClass(LightningBolt.class, aabb);
         if (!lightningBolts.isEmpty() && !state.getValue(AngryBlock.IS_LIGHTNING)) {
             BlockState newState = state.setValue(AngryBlock.IS_LIGHTNING, true);
-            level.setBlock(pos, newState, 3);
+            level.setBlockAndUpdate(pos, newState);
         }
         if (state.getValue(AngryBlock.IS_LIGHTNING)) {
             final double radius = 6.0f;
             final double pushStrength = 1.0f;
             final float damageAmount = 1.5f;
+
+            AABB forceFieldAABB = new AABB(pos).inflate(radius);
+            List<LivingEntity> nearbyEntities = level.getEntitiesOfClass(LivingEntity.class, forceFieldAABB, entity ->
+                    !(entity instanceof Player player && (player.isCreative() || player.isSpectator()))
+            );
+
+            Vec3 blockCenter = Vec3.atCenterOf(pos);
+            for (LivingEntity entity : nearbyEntities) {
+                Vec3 entityPos = entity.position();
+                Vec3 pushVector = entityPos.subtract(blockCenter).normalize();
+                entity.push(pushVector.x * pushStrength, pushVector.y * pushStrength * 2, pushVector.z * pushStrength);
+                entity.hurtMarked = true;
+                entity.setHealth(entity.getHealth() - damageAmount);
+            }
+        }
+        if(state.getValue(AngryBlock.IS_ATOMIC)) {
+            final double radius = 8.0f;
+            final double pushStrength = -1.5f;
+            final float damageAmount = 0.5f;
 
             AABB forceFieldAABB = new AABB(pos).inflate(radius);
             List<LivingEntity> nearbyEntities = level.getEntitiesOfClass(LivingEntity.class, forceFieldAABB, entity ->

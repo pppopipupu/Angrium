@@ -1,4 +1,5 @@
-package com.pppopipupu.angry.render;
+package com.pppopipupu.angry.render.particle;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.pppopipupu.angry.Angry;
@@ -6,19 +7,21 @@ import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.client.particle.Particle;
-import org.joml.Quaternionf;
+import net.neoforged.neoforge.client.model.data.ModelData;
 
-public class AngryParticle  extends Particle {
+public class AngryParticle extends Particle {
 
     public static BakedModel ANGRY_MODEL;
     private final float rotSpeed;
@@ -45,7 +48,7 @@ public class AngryParticle  extends Particle {
 
         this.orbitRadius = 4F;
         this.orbitSpeed = 0.2F;
-        this.currentAngle = this.random.nextFloat() * (float)(2 * Math.PI);
+        this.currentAngle = this.random.nextFloat() * (float) (2 * Math.PI);
 
         int orbitType = this.random.nextInt(4);
         float tiltAngle = switch (orbitType) {
@@ -56,8 +59,8 @@ public class AngryParticle  extends Particle {
             default -> 0.0F;
         };
 
-        this.sinTilt = Mth.sin((float)Math.toRadians(tiltAngle));
-        this.cosTilt = Mth.cos((float)Math.toRadians(tiltAngle));
+        this.sinTilt = Mth.sin((float) Math.toRadians(tiltAngle));
+        this.cosTilt = Mth.cos((float) Math.toRadians(tiltAngle));
         double localZComponent = this.orbitRadius * Mth.sin(this.currentAngle);
         double localXComponent = this.orbitRadius * Mth.cos(this.currentAngle);
         double rotatedY = -this.sinTilt * localZComponent;
@@ -94,8 +97,8 @@ public class AngryParticle  extends Particle {
 
     @Override
     public void render(VertexConsumer vertexConsumer, Camera camera, float partialTick) {
-        if(ANGRY_MODEL == null) {
-            BlockRenderDispatcher render =  Minecraft.getInstance().getBlockRenderer();
+        BlockRenderDispatcher render = Minecraft.getInstance().getBlockRenderer();
+        if (ANGRY_MODEL == null) {
             AngryParticle.ANGRY_MODEL = render.getBlockModel(Angry.ANGRY_BLOCK.get().defaultBlockState());
         }
 
@@ -108,27 +111,35 @@ public class AngryParticle  extends Particle {
         poseStack.pushPose();
         poseStack.translate(lerpX, lerpY, lerpZ);
         float rotation = (this.age + partialTick) * this.rotSpeed * 20.0F;
-        poseStack.mulPose(camera.rotation());
         poseStack.mulPose(com.mojang.math.Axis.YP.rotationDegrees(rotation));
         float scale = 0.3F;
         poseStack.scale(scale, scale, scale);
         poseStack.translate(-0.5, -0.5, -0.5);
-
         MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
         VertexConsumer buffer = bufferSource.getBuffer(RenderType.solid());
 
         int light = LevelRenderer.getLightColor(this.level, BlockPos.containing(this.x, this.y, this.z));
 
-        Minecraft.getInstance().getBlockRenderer().getModelRenderer()
-                .renderModel(poseStack.last(), buffer, null, ANGRY_MODEL, 1.0F, 1.0F, 1.0F, light, 0xF000F0);
-
-        bufferSource.endBatch();
-
+        render.getModelRenderer()
+                .renderModel(poseStack.last(), buffer, null, ANGRY_MODEL, 1.0F, 1.0F, 1.0F, light, 0xF000F0, ModelData.EMPTY, RenderType.solid());
         poseStack.popPose();
+
     }
 
     @Override
     public ParticleRenderType getRenderType() {
         return ParticleRenderType.CUSTOM;
+    }
+
+    public static class AngryParticleProvider implements ParticleProvider<SimpleParticleType> {
+        public AngryParticleProvider(SpriteSet spriteSet) {
+        }
+
+        @Override
+        public Particle createParticle(SimpleParticleType type, ClientLevel level,
+                                       double x, double y, double z,
+                                       double xd, double yd, double zd) {
+            return new AngryParticle(level, x, y, z, xd, yd, zd);
+        }
     }
 }

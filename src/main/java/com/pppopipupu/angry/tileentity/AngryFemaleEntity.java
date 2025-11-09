@@ -2,17 +2,22 @@ package com.pppopipupu.angry.tileentity;
 
 import com.pppopipupu.angry.Angry;
 import com.pppopipupu.angry.ShaderManager;
+import com.pppopipupu.angry.block.AngryBlock;
 import com.pppopipupu.angry.block.AngryFemaleBlock;
 import com.pppopipupu.angry.block.MultiPartBlock;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.item.component.FireworkExplosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+
+import java.util.List;
 
 public class AngryFemaleEntity extends BlockEntity {
     public float prevRotationAngle = 0.0f;
@@ -20,7 +25,9 @@ public class AngryFemaleEntity extends BlockEntity {
     private static final float ROTATION_SPEED = 12.0f;
     private static final float LERP_FACTOR = 0.86f;
     public boolean prevTickFlag = false;
-
+    public boolean is_jiaopei = false;
+    public int jiaopeiTime =0;
+    public BlockPos jiaopeiPos = null;
     public AngryFemaleEntity(BlockPos pos, BlockState blockState) {
         super(Angry.ANGRY_FEMALE_ENTITY.get(), pos, blockState);
     }
@@ -28,7 +35,15 @@ public class AngryFemaleEntity extends BlockEntity {
 
     public static void tick(Level level, BlockPos pos, BlockState state, AngryFemaleEntity blockEntity) {
         blockEntity.prevRotationAngle = blockEntity.rotationAngle;
-
+        if(blockEntity.is_jiaopei && blockEntity.jiaopeiTime > 0) {
+            blockEntity.jiaopeiTime--;
+        }
+        else if(blockEntity.is_jiaopei && blockEntity.jiaopeiPos != null) {
+            BlockState newState = level.getBlockState(blockEntity.jiaopeiPos).setValue(AngryBlock.IS_ATOMIC, true);
+            level.setBlockAndUpdate(blockEntity.jiaopeiPos, newState);
+            level.createFireworks(pos.getX(),pos.getY(),pos.getZ(),0,0,0, List.of(FireworkExplosion.DEFAULT));
+            level.destroyBlock(pos, false);
+        }
         Minecraft mc = Minecraft.getInstance();
         HitResult hitResult = mc.hitResult;
 
@@ -46,21 +61,25 @@ public class AngryFemaleEntity extends BlockEntity {
             }
         }
 
-        if (isLookingAt) {
+        if (blockEntity.is_jiaopei) {
+            blockEntity.rotationAngle += ROTATION_SPEED * 3;
+        }
+        else if (isLookingAt) {
             blockEntity.rotationAngle += ROTATION_SPEED;
-        } else {
+        }
+        else {
             blockEntity.rotationAngle *= LERP_FACTOR;
             if (Math.abs(blockEntity.rotationAngle) < 0.1f) {
                 blockEntity.rotationAngle = 0.0f;
             }
         }
         if (state.getValue(AngryFemaleBlock.IS_LOVE)) {
-            if(!ShaderManager.flag && isLookingAt) {
-                ShaderManager.flag = true;
+            if (ShaderManager.flag != 0 && isLookingAt) {
+                ShaderManager.flag = 0;
+            } else if (ShaderManager.flag == 0 && !isLookingAt && blockEntity.prevTickFlag) {
+                ShaderManager.flag = -1;
             }
-            else if(ShaderManager.flag && !isLookingAt && blockEntity.prevTickFlag) {
-                ShaderManager.flag = false;
-            }
+            blockEntity.prevTickFlag = ShaderManager.flag == 0;
             double centerX = pos.getX() + 0.5;
             double centerY = pos.getY() + 0.5;
             double centerZ = pos.getZ() + 0.5;
@@ -68,7 +87,19 @@ public class AngryFemaleEntity extends BlockEntity {
             double randomX = centerX + (level.random.nextDouble() - 0.5) * 3.0;
             double randomY = centerY + (level.random.nextDouble() - 0.5) * 3.0;
             double randomZ = centerZ + (level.random.nextDouble() - 0.5) * 3.0;
+            if (level.getGameTime() % 20 == 0) {
+                int radius = 2;
+                BlockPos.betweenClosed(pos.offset(-radius, -radius, -radius),
+                        pos.offset(radius, radius, radius)).forEach(blockPos -> {
+                    if ((level.getBlockState(blockPos).getBlock() instanceof AngryBlock && !level.getBlockState(blockPos).getValue(AngryBlock.IS_ATOMIC) && level.getBlockState(blockPos).getValue(AngryBlock.IS_CORE) )) {
+                        blockEntity.is_jiaopei = true;
+                        ((AngryBlockEntity) level.getBlockEntity(blockPos)).is_jiaopei = true;
+                        blockEntity.jiaopeiTime = 100;
+                        blockEntity.jiaopeiPos = blockPos;
+                    }
+                });
 
+            }
             level.addParticle(ParticleTypes.HEART, randomX, randomY, randomZ, 0.0, 1.0, 0.0);
             blockEntity.prevTickFlag = isLookingAt;
         }

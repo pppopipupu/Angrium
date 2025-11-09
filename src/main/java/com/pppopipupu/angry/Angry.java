@@ -7,7 +7,7 @@ import com.pppopipupu.angry.block.AngryFemaleBlock;
 import com.pppopipupu.angry.block.MultiPartBlock;
 import com.pppopipupu.angry.entity.AngryFireBall;
 import com.pppopipupu.angry.item.AngryBlockItem;
-import com.pppopipupu.angry.item.AngryLightningItem;
+import com.pppopipupu.angry.item.AngrySpearItem;
 import com.pppopipupu.angry.item.AngrySwordItem;
 import com.pppopipupu.angry.tileentity.AngryBlockEntity;
 import com.pppopipupu.angry.tileentity.AngryFemaleEntity;
@@ -76,16 +76,18 @@ public class Angry {
     // Blocks
     public static final DeferredBlock<AngryBlock> ANGRY_BLOCK = BLOCKS.register("angry_block", () -> new AngryBlock(Block.Properties.of().strength(2.0f).mapColor(MapColor.STONE).noOcclusion()));
     public static final DeferredBlock<AngryFemaleBlock> ANGRY_FEMALE_BLOCK = BLOCKS.register("angry_female_block", () -> new AngryFemaleBlock(Block.Properties.of().strength(2.0f).mapColor(MapColor.STONE).explosionResistance(1000f).noOcclusion()));
-   // public static final DeferredBlock<Block> HAGRY_BLOCK = BLOCKS.registerSimpleBlock("hagry_block");
+    public static final DeferredBlock<Block> SURPRISE_BLOCK = BLOCKS.registerSimpleBlock("surprise_block");
+    // public static final DeferredBlock<Block> HAGRY_BLOCK = BLOCKS.registerSimpleBlock("hagry_block");
     // Codec
     public static final DeferredHolder<MapCodec<? extends Block>, MapCodec<AngryBlock>> SIMPLE_CODEC = REGISTRAR.register("simple", () -> simpleCodec(AngryBlock::new));
 
     // Items
-    public static final DeferredItem<BlockItem> ANGRY_LIGHTNING_BLOCK_ITEM = ITEMS.register("angry_lightning_block", () -> new AngryLightningItem(ANGRY_BLOCK.get(), new Item.Properties()));
-    public static final DeferredItem<BlockItem> ANGRY_BLOCK_ITEM = ITEMS.register("angry_block", () -> new AngryBlockItem(ANGRY_BLOCK.get(), new Item.Properties()));
+    public static final DeferredItem<BlockItem> ANGRY_ATOMIC_BLOCK_ITEM = ITEMS.register("angry_atomic_block", () -> new AngryBlockItem(ANGRY_BLOCK.get(), new Item.Properties(),2));
+    public static final DeferredItem<BlockItem> ANGRY_LIGHTNING_BLOCK_ITEM = ITEMS.register("angry_lightning_block", () -> new AngryBlockItem(ANGRY_BLOCK.get(), new Item.Properties(),1));
+    public static final DeferredItem<BlockItem> ANGRY_BLOCK_ITEM = ITEMS.register("angry_block", () -> new AngryBlockItem(ANGRY_BLOCK.get(), new Item.Properties(),0));
     public static final DeferredItem<BlockItem> ANGRY_FEMALE_ITEM = ITEMS.registerSimpleBlockItem("angry_female_block", ANGRY_FEMALE_BLOCK);
-    public static final DeferredItem<Item> ANGRY_SWORD= ITEMS.register("angry_sword", AngrySwordItem::new);
-    public static final DeferredItem<Item> ANGRY_SPEAR = ITEMS.registerSimpleItem("angry_spear");
+    public static final DeferredItem<Item> ANGRY_SWORD = ITEMS.register("angry_sword", AngrySwordItem::new);
+    public static final DeferredItem<Item> ANGRY_SPEAR = ITEMS.register("angry_spear", () -> new AngrySpearItem());
     // Block Entities
     public static final Supplier<BlockEntityType<AngryBlockEntity>> ANGRY_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register("angry_block_entity", () -> BlockEntityType.Builder.of(AngryBlockEntity::new, ANGRY_BLOCK.get()).build(null));
     public static final Supplier<BlockEntityType<AngryFemaleEntity>> ANGRY_FEMALE_ENTITY = BLOCK_ENTITY_TYPES.register("angry_female_entity", () -> BlockEntityType.Builder.of(AngryFemaleEntity::new, ANGRY_FEMALE_BLOCK.get()).build(null));
@@ -112,6 +114,9 @@ public class Angry {
 
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> ANGRY_PARTICLE =
             PARTICLE_TYPES.register("angry_particle", () -> new SimpleParticleType(false));
+
+    public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SURPRISE_PARTICLE =
+            PARTICLE_TYPES.register("surprise_particle", () -> new SimpleParticleType(false));
 
     public Angry(IEventBus modEventBus, ModContainer modContainer) {
         BLOCKS.register(modEventBus);

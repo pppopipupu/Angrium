@@ -23,16 +23,20 @@ import java.util.List;
 
 public class AngryBlock extends MultiPartBlock {
     public static final BooleanProperty IS_LIGHTNING = BooleanProperty.create("is_lightning");
+    public static final BooleanProperty IS_ATOMIC = BooleanProperty.create("is_atomic");
+
 
     public AngryBlock(Properties properties) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(IS_LIGHTNING, false));
+        this.registerDefaultState(this.stateDefinition.any().setValue(IS_ATOMIC, false));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(IS_LIGHTNING);
+        builder.add(IS_ATOMIC);
     }
 
     @Override
