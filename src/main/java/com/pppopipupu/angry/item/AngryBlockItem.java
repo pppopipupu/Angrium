@@ -1,6 +1,7 @@
 package com.pppopipupu.angry.item;
 
 import com.pppopipupu.angry.block.AngryBlock;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -16,7 +17,7 @@ import java.util.List;
 public class AngryBlockItem extends BlockItem {
     public int mode;
 
-    public AngryBlockItem(Block block, Properties properties,int mode) {
+    public AngryBlockItem(Block block, Properties properties, int mode) {
         super(block, properties);
         this.mode = mode;
     }
@@ -36,6 +37,21 @@ public class AngryBlockItem extends BlockItem {
         }
 
 
+    }
+
+    @Override
+    public String getDescriptionId() {
+        switch (mode) {
+            case 0:
+                return "block.angry.angry_block";
+            case 1:
+                return "block.angry.angry_lightning_block";
+            case 2:
+                return "block.angry.angry_atomic_block";
+            default:
+                return "";
+
+        }
     }
 
     @Override

@@ -28,8 +28,8 @@ public class AngryBlock extends MultiPartBlock {
 
     public AngryBlock(Properties properties) {
         super(properties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(IS_LIGHTNING, false));
-        this.registerDefaultState(this.stateDefinition.any().setValue(IS_ATOMIC, false));
+        this.registerDefaultState(this.stateDefinition.any().setValue(IS_LIGHTNING, false).setValue(IS_ATOMIC, false));
+
     }
 
     @Override
