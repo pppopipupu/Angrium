@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "angry:angry_gun"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "烤地瓜": {
+      "conditions": {
+        "items": [
+          {
+            "items": "angry:angry_atomic_block"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "烤地瓜"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "angry:angry_gun"
+    ]
+  }
+}

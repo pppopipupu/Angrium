@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "angry:angry_spear"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "法式白汁烩小牛肉": {
+      "conditions": {
+        "items": [
+          {
+            "items": "angry:angry_atomic_block"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "法式白汁烩小牛肉"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "angry:angry_spear"
+    ]
+  }
+}

@@ -166,6 +166,7 @@ public class Angry {
                         .add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, Angry::bootstrapBiomeModifiers),
                 Set.of(MODID)
         ));
+        generator.addProvider(event.includeServer(), new AngryRecipeProvider(packOutput, lookupProvider));
     }
 
     private static void bootstrapConfiguredFeatures(net.minecraft.data.worldgen.BootstrapContext<ConfiguredFeature<?, ?>> context) {

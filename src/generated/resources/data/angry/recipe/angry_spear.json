@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    {
+      "item": "angry:angry_lightning_block"
+    },
+    {
+      "item": "angry:angry_lightning_block"
+    },
+    {
+      "item": "angry:angry_lightning_block"
+    },
+    {
+      "item": "angry:angry_lightning_block"
+    },
+    {
+      "item": "angry:angry_sword"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "angry:angry_spear"
+  }
+}
