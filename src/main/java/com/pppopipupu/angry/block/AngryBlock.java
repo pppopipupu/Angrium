@@ -65,7 +65,7 @@ public class AngryBlock extends MultiPartBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
-        if(!pState.getValue(IS_CORE)) {
+        if (!pState.getValue(IS_CORE)) {
             return null;
         }
         if (pLevel.isClientSide()) {
@@ -77,14 +77,13 @@ public class AngryBlock extends MultiPartBlock {
 
     @Override
     protected @NotNull List<ItemStack> getDrops(BlockState state, LootParams.Builder params) {
-        if(state.getValue(MultiPartBlock.IS_CORE)) {
-            if(state.getValue(IS_LIGHTNING)) {
-                return List.of(Angry.ANGRY_LIGHTNING_BLOCK_ITEM.get().getDefaultInstance());
-            }
-            if(state.getValue(IS_ATOMIC)) {
-                return List.of(Angry.ANGRY_ATOMIC_BLOCK_ITEM.get().getDefaultInstance());
-            }
+        if (state.getValue(IS_LIGHTNING)) {
+            return List.of(Angry.ANGRY_LIGHTNING_BLOCK_ITEM.get().getDefaultInstance());
         }
+        if (state.getValue(IS_ATOMIC)) {
+            return List.of(Angry.ANGRY_ATOMIC_BLOCK_ITEM.get().getDefaultInstance());
+        }
+
         return List.of(Angry.ANGRY_BLOCK_ITEM.get().getDefaultInstance());
     }
 }

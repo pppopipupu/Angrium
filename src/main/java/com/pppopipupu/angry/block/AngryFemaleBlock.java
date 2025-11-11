@@ -73,9 +73,12 @@ public class AngryFemaleBlock extends MultiPartBlock {
             return null;
         }
         if (pLevel.isClientSide()) {
+            return createTickerHelper(pBlockEntityType, Angry.ANGRY_FEMALE_ENTITY.get(), AngryFemaleEntity::tickClient);
+        }
+        else {
             return createTickerHelper(pBlockEntityType, Angry.ANGRY_FEMALE_ENTITY.get(), AngryFemaleEntity::tick);
         }
-        return null;
+
     }
 
 }

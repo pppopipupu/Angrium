@@ -35,9 +35,7 @@ public class AngryFemaleEntity extends BlockEntity {
         super(Angry.ANGRY_FEMALE_ENTITY.get(), pos, blockState);
     }
 
-
     public static void tick(Level level, BlockPos pos, BlockState state, AngryFemaleEntity blockEntity) {
-        blockEntity.prevRotationAngle = blockEntity.rotationAngle;
         if(blockEntity.is_jiaopei && blockEntity.jiaopeiTime > 0) {
             blockEntity.jiaopeiTime--;
         }
@@ -46,18 +44,42 @@ public class AngryFemaleEntity extends BlockEntity {
             BlockPos.betweenClosed(pos.offset(-radius, -radius, -radius),
                     pos.offset(radius, radius, radius)).forEach(blockPos -> {
                 if ((level.getBlockState(blockPos).getBlock() instanceof AngryBlock&& level.getBlockState(blockPos).getValue(AngryBlock.IS_CORE) )) {
-                    BlockState blockState = level.getBlockState(blockPos).setValue(AngryBlock.IS_ATOMIC, true);
+                    BlockState blockState = Angry.ANGRY_BLOCK.get().defaultBlockState().setValue(AngryBlock.IS_ATOMIC,true);
                     level.createFireworks(pos.getX(),pos.getY(),pos.getZ(),0,0,0,List.of(FireworkExplosion.DEFAULT));
-                    level.setBlockAndUpdate(blockPos, blockState);
+                    level.setBlock(blockPos, blockState,3);
                     ((AngryFemaleBlock) state.getBlock()).onRemove(state,level,pos, Blocks.AIR.defaultBlockState(),false);
                     level.destroyBlock(pos, false);
 
                 }
             });
         }
+        if (level.getGameTime() % 20 == 0 && !blockEntity.is_jiaopei) {
+            int radius = 2;
+            BlockPos.betweenClosed(pos.offset(-radius, -radius, -radius),
+                    pos.offset(radius, radius, radius)).forEach(blockPos -> {
+                if ((level.getBlockState(blockPos).getBlock() instanceof AngryBlock && !level.getBlockState(blockPos).getValue(AngryBlock.IS_ATOMIC) && level.getBlockState(blockPos).getValue(AngryBlock.IS_CORE) )) {
+                    blockEntity.is_jiaopei = true;
+                    blockEntity.jiaopeiTime = 100;
+                }
+            });
+
+        }
+    }
+    public static void tickClient(Level level, BlockPos pos, BlockState state, AngryFemaleEntity blockEntity) {
+        blockEntity.prevRotationAngle = blockEntity.rotationAngle;
         Minecraft mc = Minecraft.getInstance();
         HitResult hitResult = mc.hitResult;
+        if (level.getGameTime() % 20 == 0 && !blockEntity.is_jiaopei) {
+            int radius = 2;
+            BlockPos.betweenClosed(pos.offset(-radius, -radius, -radius),
+                    pos.offset(radius, radius, radius)).forEach(blockPos -> {
+                if ((level.getBlockState(blockPos).getBlock() instanceof AngryBlock && !level.getBlockState(blockPos).getValue(AngryBlock.IS_ATOMIC) && level.getBlockState(blockPos).getValue(AngryBlock.IS_CORE) )) {
+                    blockEntity.is_jiaopei = true;
+                    blockEntity.jiaopeiTime = 100;
+                }
+            });
 
+        }
         boolean isLookingAt = false;
         if (hitResult != null && hitResult.getType() == HitResult.Type.BLOCK) {
             BlockHitResult blockHitResult = (BlockHitResult) hitResult;
@@ -98,17 +120,6 @@ public class AngryFemaleEntity extends BlockEntity {
             double randomX = centerX + (level.random.nextDouble() - 0.5) * 3.0;
             double randomY = centerY + (level.random.nextDouble() - 0.5) * 3.0;
             double randomZ = centerZ + (level.random.nextDouble() - 0.5) * 3.0;
-            if (level.getGameTime() % 20 == 0 && !blockEntity.is_jiaopei) {
-                int radius = 2;
-                BlockPos.betweenClosed(pos.offset(-radius, -radius, -radius),
-                        pos.offset(radius, radius, radius)).forEach(blockPos -> {
-                    if ((level.getBlockState(blockPos).getBlock() instanceof AngryBlock && !level.getBlockState(blockPos).getValue(AngryBlock.IS_ATOMIC) && level.getBlockState(blockPos).getValue(AngryBlock.IS_CORE) )) {
-                        blockEntity.is_jiaopei = true;
-                        blockEntity.jiaopeiTime = 100;
-                        }
-                });
-
-            }
             level.addParticle(ParticleTypes.HEART, randomX, randomY, randomZ, 0.0, 1.0, 0.0);
             blockEntity.prevTickFlag = isLookingAt;
         }
