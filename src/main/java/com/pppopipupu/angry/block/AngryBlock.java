@@ -78,12 +78,14 @@ public class AngryBlock extends MultiPartBlock {
     @Override
     protected @NotNull List<ItemStack> getDrops(BlockState state, LootParams.Builder params) {
         if(state.getValue(MultiPartBlock.IS_CORE)) {
-
-            return state.getValue(AngryBlock.IS_LIGHTNING)
-                    ? List.of(Angry.ANGRY_LIGHTNING_BLOCK_ITEM.get().getDefaultInstance(),Angry.ANGRY_SWORD.get().getDefaultInstance())
-                    : List.of(Angry.ANGRY_BLOCK_ITEM.get().getDefaultInstance());
+            if(state.getValue(IS_LIGHTNING)) {
+                return List.of(Angry.ANGRY_LIGHTNING_BLOCK_ITEM.get().getDefaultInstance());
+            }
+            if(state.getValue(IS_ATOMIC)) {
+                return List.of(Angry.ANGRY_ATOMIC_BLOCK_ITEM.get().getDefaultInstance());
+            }
         }
-        return List.of();
+        return List.of(Angry.ANGRY_BLOCK_ITEM.get().getDefaultInstance());
     }
 }
 

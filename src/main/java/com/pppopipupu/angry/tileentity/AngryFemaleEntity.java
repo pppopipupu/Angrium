@@ -11,13 +11,16 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.item.component.FireworkExplosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 
 public class AngryFemaleEntity extends BlockEntity {
@@ -28,7 +31,6 @@ public class AngryFemaleEntity extends BlockEntity {
     public boolean prevTickFlag = false;
     public boolean is_jiaopei = false;
     public int jiaopeiTime =0;
-    public BlockPos jiaopeiPos = null;
     public AngryFemaleEntity(BlockPos pos, BlockState blockState) {
         super(Angry.ANGRY_FEMALE_ENTITY.get(), pos, blockState);
     }
@@ -39,11 +41,19 @@ public class AngryFemaleEntity extends BlockEntity {
         if(blockEntity.is_jiaopei && blockEntity.jiaopeiTime > 0) {
             blockEntity.jiaopeiTime--;
         }
-        else if(blockEntity.is_jiaopei && blockEntity.jiaopeiPos != null && level.getBlockState(blockEntity.jiaopeiPos).getBlock() instanceof AngryBlock) {
-            BlockState newState = level.getBlockState(blockEntity.jiaopeiPos).setValue(AngryBlock.IS_ATOMIC, true);
-            level.setBlockAndUpdate(blockEntity.jiaopeiPos, newState);
-            level.createFireworks(pos.getX(),pos.getY(),pos.getZ(),0,0,0, List.of(FireworkExplosion.DEFAULT));
-            level.destroyBlock(pos, false);
+        else if(blockEntity.is_jiaopei) {
+            int radius = 2;
+            BlockPos.betweenClosed(pos.offset(-radius, -radius, -radius),
+                    pos.offset(radius, radius, radius)).forEach(blockPos -> {
+                if ((level.getBlockState(blockPos).getBlock() instanceof AngryBlock&& level.getBlockState(blockPos).getValue(AngryBlock.IS_CORE) )) {
+                    BlockState blockState = level.getBlockState(blockPos).setValue(AngryBlock.IS_ATOMIC, true);
+                    level.createFireworks(pos.getX(),pos.getY(),pos.getZ(),0,0,0,List.of(FireworkExplosion.DEFAULT));
+                    level.setBlockAndUpdate(blockPos, blockState);
+                    ((AngryFemaleBlock) state.getBlock()).onRemove(state,level,pos, Blocks.AIR.defaultBlockState(),false);
+                    level.destroyBlock(pos, false);
+
+                }
+            });
         }
         Minecraft mc = Minecraft.getInstance();
         HitResult hitResult = mc.hitResult;
@@ -63,7 +73,7 @@ public class AngryFemaleEntity extends BlockEntity {
         }
 
         if (blockEntity.is_jiaopei) {
-            blockEntity.rotationAngle += ROTATION_SPEED * 3;
+            blockEntity.rotationAngle += ROTATION_SPEED * 5;
         }
         else if (isLookingAt) {
             blockEntity.rotationAngle += ROTATION_SPEED;
@@ -88,15 +98,13 @@ public class AngryFemaleEntity extends BlockEntity {
             double randomX = centerX + (level.random.nextDouble() - 0.5) * 3.0;
             double randomY = centerY + (level.random.nextDouble() - 0.5) * 3.0;
             double randomZ = centerZ + (level.random.nextDouble() - 0.5) * 3.0;
-            if (level.getGameTime() % 20 == 0 && !blockEntity.is_jiaopei && blockEntity.jiaopeiPos == null) {
+            if (level.getGameTime() % 20 == 0 && !blockEntity.is_jiaopei) {
                 int radius = 2;
                 BlockPos.betweenClosed(pos.offset(-radius, -radius, -radius),
                         pos.offset(radius, radius, radius)).forEach(blockPos -> {
                     if ((level.getBlockState(blockPos).getBlock() instanceof AngryBlock && !level.getBlockState(blockPos).getValue(AngryBlock.IS_ATOMIC) && level.getBlockState(blockPos).getValue(AngryBlock.IS_CORE) )) {
                         blockEntity.is_jiaopei = true;
-                    //    ((AngryBlockEntity) level.getBlockEntity(blockPos)).is_jiaopei = true;
                         blockEntity.jiaopeiTime = 100;
-                        blockEntity.jiaopeiPos = blockPos;
                         }
                 });
 

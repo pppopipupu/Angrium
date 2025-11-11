@@ -67,31 +67,22 @@ public class AngryBlockEntity extends BlockEntity {
                     !(entity instanceof Player player && (player.isCreative() || player.isSpectator()))
             );
 
-            Vec3 blockCenter = Vec3.atCenterOf(pos);
+
             for (LivingEntity entity : nearbyEntities) {
-                Vec3 entityPos = entity.position();
-                Vec3 pushVector = entityPos.subtract(blockCenter).normalize();
-                entity.push(pushVector.x * pushStrength, pushVector.y * pushStrength * 2, pushVector.z * pushStrength);
-                entity.hurtMarked = true;
                 entity.setHealth(entity.getHealth() - damageAmount);
             }
         }
         if(state.getValue(AngryBlock.IS_ATOMIC)) {
-            final double radius = 8.0f;
-            final double pushStrength = -1.5f;
-            final float damageAmount = 0.5f;
+            final double radius = 10.0f;
+            final double pushStrength = -4.5f;
+            final float damageAmount = 1.0f;
 
             AABB forceFieldAABB = new AABB(pos).inflate(radius);
-            List<LivingEntity> nearbyEntities = level.getEntitiesOfClass(LivingEntity.class, forceFieldAABB, entity ->
-                    !(entity instanceof Player player && (player.isCreative() || player.isSpectator()))
+            List<LivingEntity> nearbyEntities = level.getEntitiesOfClass(LivingEntity.class, forceFieldAABB
             );
 
             Vec3 blockCenter = Vec3.atCenterOf(pos);
             for (LivingEntity entity : nearbyEntities) {
-                Vec3 entityPos = entity.position();
-                Vec3 pushVector = entityPos.subtract(blockCenter).normalize();
-                entity.push(pushVector.x * pushStrength, pushVector.y * pushStrength * 2, pushVector.z * pushStrength);
-                entity.hurtMarked = true;
                 entity.setHealth(entity.getHealth() - damageAmount);
             }
         }
