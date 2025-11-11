@@ -7,6 +7,7 @@ import com.pppopipupu.angry.block.AngryFemaleBlock;
 import com.pppopipupu.angry.block.MultiPartBlock;
 import com.pppopipupu.angry.entity.AngryFireBall;
 import com.pppopipupu.angry.item.AngryBlockItem;
+import com.pppopipupu.angry.item.AngryGunItem;
 import com.pppopipupu.angry.item.AngrySpearItem;
 import com.pppopipupu.angry.item.AngrySwordItem;
 import com.pppopipupu.angry.tileentity.AngryBlockEntity;
@@ -88,7 +89,7 @@ public class Angry {
     public static final DeferredItem<BlockItem> ANGRY_FEMALE_ITEM = ITEMS.registerSimpleBlockItem("angry_female_block", ANGRY_FEMALE_BLOCK);
     public static final DeferredItem<AngrySwordItem> ANGRY_SWORD = ITEMS.register("angry_sword", AngrySwordItem::new);
     public static final DeferredItem<AngrySpearItem> ANGRY_SPEAR = ITEMS.register("angry_spear", AngrySpearItem::new);
-    public static final DeferredItem<Item> ANGRY_GUN = ITEMS.registerSimpleItem("angry_gun");
+    public static final DeferredItem<Item> ANGRY_GUN = ITEMS.register("angry_gun", AngryGunItem::new);
     // Block Entities
     public static final Supplier<BlockEntityType<AngryBlockEntity>> ANGRY_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register("angry_block_entity", () -> BlockEntityType.Builder.of(AngryBlockEntity::new, ANGRY_BLOCK.get()).build(null));
     public static final Supplier<BlockEntityType<AngryFemaleEntity>> ANGRY_FEMALE_ENTITY = BLOCK_ENTITY_TYPES.register("angry_female_entity", () -> BlockEntityType.Builder.of(AngryFemaleEntity::new, ANGRY_FEMALE_BLOCK.get()).build(null));
